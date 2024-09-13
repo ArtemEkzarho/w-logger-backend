@@ -5,6 +5,8 @@ import { LoggerModule } from 'nestjs-pino';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { ExerciseModule } from './exercise/exercise.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -28,6 +30,9 @@ import { ExerciseModule } from './exercise/exercise.module';
         };
       },
       inject: [ConfigService],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
     }),
     ConfigModule.forRoot(),
     UsersModule,
