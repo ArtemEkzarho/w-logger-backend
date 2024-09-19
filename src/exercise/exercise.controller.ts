@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -19,6 +20,7 @@ import { ExerciseService } from './exercise.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { EXERCISE_IMAGES } from './exercise-images';
 
 @Controller('exercises')
 export class ExerciseController {
@@ -38,7 +40,7 @@ export class ExerciseController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: 'public/exercises',
+        destination: EXERCISE_IMAGES,
         filename: (req, file, callback) => {
           callback(
             null,
@@ -58,9 +60,7 @@ export class ExerciseController {
       }),
     )
     _file: Express.Multer.File,
-  ) {
-    console.log(_file);
-  }
+  ) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
