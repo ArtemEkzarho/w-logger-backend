@@ -8,6 +8,7 @@ import {
   Param,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -64,8 +65,8 @@ export class ExerciseController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getExercises() {
-    return this.exerciseService.getExercises();
+  async getExercises(@Query('favorite') favorite?: string) {
+    return this.exerciseService.getExercises(favorite);
   }
 
   @Get(':exerciseId')

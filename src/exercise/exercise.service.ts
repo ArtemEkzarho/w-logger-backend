@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { promises } from 'fs';
 import { join } from 'path';
 import { EXERCISE_IMAGES } from './exercise-images';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ExerciseService {
@@ -18,8 +19,14 @@ export class ExerciseService {
     });
   }
 
-  async getExercises() {
-    const exercises = await this.prismaService.exercise.findMany();
+  async getExercises(favorite?: string) {
+    const args: Prisma.ExerciseFindManyArgs = {};
+
+    if (favorite === 'true') {
+      args.where = { favorite: true };
+    }
+
+    const exercises = await this.prismaService.exercise.findMany(args);
 
     return Promise.all(
       exercises.map(async (exercise) => ({
