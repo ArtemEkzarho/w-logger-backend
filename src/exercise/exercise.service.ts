@@ -5,18 +5,26 @@ import { promises } from 'fs';
 import { join } from 'path';
 import { EXERCISE_IMAGES } from './exercise-images';
 import { Prisma } from '@prisma/client';
+import { ExerciseGateWay } from './exercise.gateway';
 
 @Injectable()
 export class ExerciseService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly exerciseGateway: ExerciseGateWay,
+  ) {}
 
   async createExercise(data: CreateExerciseRequest, userId: number) {
-    return this.prismaService.exercise.create({
+    const exercise = await this.prismaService.exercise.create({
       data: {
         ...data,
         userId,
       },
     });
+
+    this.exerciseGateway.handleExerciseUpdate();
+
+    return exercise;
   }
 
   async getExercises(favorite?: string) {
